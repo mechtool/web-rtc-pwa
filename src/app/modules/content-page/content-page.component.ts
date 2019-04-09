@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {OverlayContainer} from "@angular/cdk/overlay";
 import {sideNavListTrigger, routerTransition} from "../../animations/animations";
 import {SideNavItem} from "../../classes/Classes";
@@ -28,7 +28,10 @@ export class ContentPageComponent implements OnInit {
     public componentCssClass = this.colorItems[1].colorClass;
     
     
-	constructor(private overlay : OverlayContainer, private media: BreakpointObserver
+	constructor(
+	    private overlay : OverlayContainer,
+	    private media: BreakpointObserver,
+	    public changeRef : ChangeDetectorRef,
 	) {
 	    this.media.observe('(max-width: 599px)').subscribe((sub)=>{  //наблюдение за медиаточкой
 		this.sideNavMode = sub.matches ? 'over' : 'side';
@@ -48,10 +51,10 @@ export class ContentPageComponent implements OnInit {
 	this.localMenuClass = this.localMenuClass === 'closed' ? 'opened' : 'closed';
     }
   
-    
     onClickMenuIcon(sidenav){
         sidenav.toggle();
     }
+    
     onClickItemSidenav(item){
 	item.active = !item.active;
 	item.icon =  item.active ? 'arrow-down' : 'arrow-right' ;
@@ -62,7 +65,7 @@ export class ContentPageComponent implements OnInit {
     }
   
     onSetTheme(theme) {
-	let that= this;
+	let that = this;
 	this.colorItems.forEach(elem => {//изменение активности иконки элемента выбора цветового меню
 	    elem.active = false;
 	    elem.colorClass === theme && (elem.active = true);
@@ -71,13 +74,10 @@ export class ContentPageComponent implements OnInit {
 	this.overlay.getContainerElement().classList.add(theme);
 	this.componentCssClass = theme;
 	//удаление цветового меню
-	/*	setTimeout(()=> {
-		    that.colorMenuVisibility = false;
-		    that.changeRef.detectChanges()
-		}, 100);*/
-	/*
-		this.router.navigateByUrl( '/content-page/started' );
-	*/
+	setTimeout(()=> {
+	    that.colorMenuVisibility = false;
+	    that.changeRef.detectChanges()
+	}, 100);
 	
     }
 

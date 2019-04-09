@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, HostBinding, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, OnInit} from '@angular/core';
 import {NavigationCancel, NavigationEnd, NavigationStart, Router} from "@angular/router";
 import {MatIconRegistry} from "@angular/material";
 import {DomSanitizer} from "@angular/platform-browser";
@@ -12,6 +12,7 @@ var swRegistration;
   templateUrl: 'app.component.html',
   styleUrls : ['app.component.css'],
     animations : [routerTransition],
+    changeDetection : ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit{
     
