@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {OverlayContainer} from "@angular/cdk/overlay";
 import {sideNavListTrigger, routerTransition} from "../../animations/animations";
 import {SideNavItem} from "../../classes/Classes";
+import {BreakpointObserver} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-content-page',
@@ -27,7 +28,12 @@ export class ContentPageComponent implements OnInit {
     public componentCssClass = this.colorItems[1].colorClass;
     
     
-    constructor(	private overlay : OverlayContainer) { }
+	constructor(private overlay : OverlayContainer, private media: BreakpointObserver
+	) {
+	    this.media.observe('(max-width: 599px)').subscribe((sub)=>{  //наблюдение за медиаточкой
+		this.sideNavMode = sub.matches ? 'over' : 'side';
+	    } );
+    }
 
   ngOnInit() {
   }

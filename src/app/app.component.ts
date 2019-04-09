@@ -2,7 +2,6 @@ import {ChangeDetectorRef, Component, HostBinding, OnInit} from '@angular/core';
 import {NavigationCancel, NavigationEnd, NavigationStart, Router} from "@angular/router";
 import {MatIconRegistry} from "@angular/material";
 import {DomSanitizer} from "@angular/platform-browser";
-import {BreakpointObserver} from '@angular/cdk/layout';
 import {routerTransition} from './animations/animations';
 
 var swRegistration;
@@ -16,7 +15,6 @@ var swRegistration;
 })
 export class AppComponent implements OnInit{
     
-    public sideNavMode;
     public progressVisible = false;
     @HostBinding('class') componentCssClass = 'second-theme';
     
@@ -25,11 +23,8 @@ export class AppComponent implements OnInit{
 	private changeRef : ChangeDetectorRef,
 	private iconRegistry : MatIconRegistry ,
 	private sanitizer : DomSanitizer,
-	private media: BreakpointObserver
     ) {
-	this.media.observe('(max-width: 599px)').subscribe((sub)=>{  //наблюдение за медиаточкой
-	    this.sideNavMode = sub.matches ? 'over' : 'side';
-	} );
+
 	this.router.events.subscribe((event) => { //запуск прогресс бара загрузки страницы с сервера
 	    if(event instanceof NavigationStart || event instanceof NavigationEnd || event instanceof NavigationCancel){
 		this.progressVisible = event instanceof NavigationStart;
