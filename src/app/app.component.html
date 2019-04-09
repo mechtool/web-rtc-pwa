@@ -1,0 +1,6 @@
+<mat-progress-bar class="app-progress-bar" mode="indeterminate" color="accent" *ngIf="progressVisible"></mat-progress-bar>
+<div class="app-container" >
+	<div class="primary-outlet-container" [@routerTransition]="getState(mainOutlet)">
+		<router-outlet #mainOutlet="outlet" (activate)="componentAdded($event)" (deactivate)="componentRemoved($event)"></router-outlet>
+	</div>
+</div>

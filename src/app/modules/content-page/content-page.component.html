@@ -1,0 +1,24 @@
+<mat-toolbar [color]="'primary'">
+	<mat-icon class="app-header-menu-icon" svgIcon="app-menu-open" (click)="onClickMenuIcon(sidenav)"  matTooltip="Основное меню"></mat-icon>
+	<span class="app-header" fxShow fxHide.lt-sm="true">{{appHeader}}</span>
+	<div  class="right-panel-container">
+		<mat-icon class="app-color-fill-menu-icon" svgIcon="color-fill" (click)="colorMenuVisibility = !colorMenuVisibility"  matTooltip="Цветовая схема"></mat-icon>
+		<mat-icon #localMenuIcon class="local-menu-icon" matTooltip="Локальное меню" aria-label="Локальное меню" svgIcon="local-menu" (click)="onClickLocalMenu()"></mat-icon>
+		<app-color-menu class="app-color-menu" *ngIf="colorMenuVisibility" [colorItems]="colorItems" (setColorTheme)="onSetTheme($event)"></app-color-menu>
+	</div>
+</mat-toolbar>
+<mat-sidenav-container class="sidenav-container">
+	<mat-sidenav class="mat-side-nav" #sidenav  [mode]="sideNavMode" [opened]="true" [@sideNavListTrigger]="sidenavItems.length">
+		<div *ngFor="let item of sidenavItems" >
+			<app-sidenav-item [item]="item" [ngClass]="item.className" (click)="onClickItemSidenav(item)"></app-sidenav-item>
+			<ng-container *ngIf="item.icon" >
+				<ng-container *ngIf="item.active">
+					<app-sidenav-item *ngFor="let item1 of item.children" [ngClass]="item1.className" [item]="item1" (click)="onClickItemSidenav(item1)" ></app-sidenav-item>
+				</ng-container>
+			</ng-container>
+		</div>
+	</mat-sidenav>
+	<mat-sidenav-content [@routerTransition]="getState(content)">
+		<router-outlet  #content="outlet"  ></router-outlet>
+	</mat-sidenav-content>
+</mat-sidenav-container>

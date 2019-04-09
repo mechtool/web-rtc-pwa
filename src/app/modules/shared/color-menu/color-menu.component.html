@@ -1,0 +1,5 @@
+<div class="color-menu-container">
+	<div class="color-menu-item" *ngFor="let item of colorItems; let inx = index" [style.background]="item.color" (click)="onSetTheme(inx)" >
+		<mat-icon class="active-color-menu-item" svgIcon="active-color-item" *ngIf="item.active"></mat-icon>
+	</div>
+</div>

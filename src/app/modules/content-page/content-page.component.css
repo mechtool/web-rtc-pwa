@@ -1,0 +1,16 @@
+
+
+
+.mat-side-nav{
+    width: 300px;
+}
+.app-header{
+    margin-left: 20px;
+}
+.app-header-menu-icon,.app-color-fill-menu-icon,.local-menu-icon{
+    cursor: pointer;
+}
+
+app-sidenav-item{
+    position: relative;
+}
