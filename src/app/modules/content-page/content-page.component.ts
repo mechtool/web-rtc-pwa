@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {OverlayContainer} from "@angular/cdk/overlay";
 import {sideNavListTrigger, routerTransition} from "../../animations/animations";
 import {SideNavItem} from "../../classes/Classes";
@@ -27,8 +27,9 @@ export class ContentPageComponent implements OnInit {
     ] ;
     public componentCssClass = this.colorItems[1].colorClass;
     
-    
-	constructor(
+    @Output() public colorChanged : EventEmitter<string> = new EventEmitter() ;
+	
+    constructor(
 	    private overlay : OverlayContainer,
 	    private media: BreakpointObserver,
 	    public changeRef : ChangeDetectorRef,
@@ -48,7 +49,7 @@ export class ContentPageComponent implements OnInit {
     }
     
     onClickLocalMenu(){
-	this.localMenuClass = this.localMenuClass === 'closed' ? 'opened' : 'closed';
+	//this.localMenuClass = this.localMenuClass === 'closed' ? 'opened' : 'closed';
     }
   
     onClickMenuIcon(sidenav){
@@ -72,7 +73,8 @@ export class ContentPageComponent implements OnInit {
 	}) ;
 	//установка темы приложения
 	this.overlay.getContainerElement().classList.add(theme);
-	this.componentCssClass = theme;
+	this.colorChanged.emit(theme);
+	//this.componentCssClass = theme;
 	//удаление цветового меню
 	setTimeout(()=> {
 	    that.colorMenuVisibility = false;

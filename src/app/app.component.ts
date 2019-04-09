@@ -3,6 +3,7 @@ import {NavigationCancel, NavigationEnd, NavigationStart, Router} from "@angular
 import {MatIconRegistry} from "@angular/material";
 import {DomSanitizer} from "@angular/platform-browser";
 import {routerTransition} from './animations/animations';
+import {ContentPageComponent} from "./modules/content-page/content-page.component";
 
 var swRegistration;
 
@@ -62,7 +63,12 @@ export class AppComponent implements OnInit{
     
     
     componentAdded(component){
-	debugger;
+	if(component instanceof ContentPageComponent){
+	   component.colorChanged.subscribe((colorClass => {
+	       this.componentCssClass = colorClass;
+	   }))
+	    
+	}
     }
     
     componentRemoved($event){
