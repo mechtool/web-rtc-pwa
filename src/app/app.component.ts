@@ -1,31 +1,93 @@
-import { Component } from '@angular/core';
+import {ChangeDetectorRef, Component, HostBinding, OnInit} from '@angular/core';
+import {NavigationCancel, NavigationEnd, NavigationStart, Router} from "@angular/router";
+import {MatIconRegistry} from "@angular/material";
+import {DomSanitizer} from "@angular/platform-browser";
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {routerTransition} from './animations/animations';
+
+var swRegistration;
+
 
 @Component({
   selector: 'app-root',
-  template: `
-    <!--The content below is only a placeholder and can be replaced.-->
-    <div style="text-align:center">
-      <h1>
-        Welcome to {{title}}!
-      </h1>
-      <img width="300" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-    </div>
-    <h2>Here are some links to help you start: </h2>
-    <ul>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-      </li>
-    </ul>
-    
-  `,
-  styles: []
+  templateUrl: 'app.component.html',
+  styleUrls : ['app.component.css'],
+    animations : [routerTransition],
 })
-export class AppComponent {
-  title = 'ng-web-push';
+export class AppComponent implements OnInit{
+    
+    public sideNavMode;
+    public progressVisible = false;
+    @HostBinding('class') componentCssClass = 'second-theme';
+    
+    constructor(
+	private router : Router,
+	private changeRef : ChangeDetectorRef,
+	private iconRegistry : MatIconRegistry ,
+	private sanitizer : DomSanitizer,
+	private media: BreakpointObserver
+    ) {
+	this.media.observe('(max-width: 599px)').subscribe((sub)=>{  //наблюдение за медиаточкой
+	    this.sideNavMode = sub.matches ? 'over' : 'side';
+	} );
+	this.router.events.subscribe((event) => { //запуск прогресс бара загрузки страницы с сервера
+	    if(event instanceof NavigationStart || event instanceof NavigationEnd || event instanceof NavigationCancel){
+		this.progressVisible = event instanceof NavigationStart;
+		this.changeRef.detectChanges();
+	    }
+	});
+	
+	//регистрация иконки в реестре иконок
+	[
+	    {name : 'local-menu', link : 'assets/icons/app-shell/menu.svg'},
+	    {name : 'app-menu-open', link : 'assets/icons/app-shell/view-grid.svg'},
+	    {name : 'arrow-down', link : 'assets/icons/app-shell/arrow_down-24px.svg'},
+	    {name : 'active-color-item', link : 'assets/icons/app-shell/baseline-done-24px.svg'},
+	    {name : 'color-fill', link : 'assets/icons/app-shell/color-fill.svg'},
+	    {name : 'arrow-right', link : 'assets/icons/app-shell/arrow_right-24px.svg'},
+	    {name : 'info', link : 'assets/icons/shared/outline-info-24px.svg'},
+	    {name : 'warning', link : 'assets/icons/shared/outline-warning-24px.svg'},
+	    {name : 'star', link : 'assets/icons/shared/outline-star-24px.svg'},
+	
+	].forEach(item => {
+	    this.iconRegistry.addSvgIcon(item.name, this.sanitizer.bypassSecurityTrustResourceUrl(item.link));
+	}) ;
+	
+    }
+    
+    
+    getState(outlet) {
+	return outlet.activatedRouteData.type;
+    }
+    
+    ngOnInit(){
+       this.initialiseServiceWorker();
+    }
+    
+    
+    componentAdded(component){
+	debugger;
+    }
+    
+    componentRemoved($event){
+    
+    }
+    
+    initialiseServiceWorker(){
+	if ('serviceWorker' in navigator && 'PushManager' in window) {
+	    console.log('Серивисный рабочий и PushNotification поддерживаються.');
+	    navigator.serviceWorker.register('sw.js')
+		.then(function(swReg) {
+		    console.log('Сервисный рабочий зарегистрирован!', swReg);
+		    swRegistration = swReg;
+		})
+		.catch(function(error) {
+		    console.error('Ошибка при регистрации сервисного рабочего!', error);
+		});
+	} else {
+	    console.warn('Серивисный рабочий и PushNotification поддерживаються!');
+	    //pushButton.textContent = 'Push Not Supported';
+	}
+    }
+    
 }

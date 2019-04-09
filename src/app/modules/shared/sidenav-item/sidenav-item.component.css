@@ -1,0 +1,22 @@
+.sidenav-item{
+    direction: ltr;
+    line-height: 46px;
+    padding: 0 8px 0 8px;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+}
+.sidenav-item:hover{
+    background: #f8f8f8;
+    color: #1c76ff;
+}
+.sidenav-item.active{
+    background: #eeeeee;
+    color: #004aff;
+}
+.menuSvgIcon{
+    position: relative;
+    top: 10px;
+    width: 32px;
+    height: 32px;
+}
