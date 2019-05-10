@@ -1,9 +1,46 @@
 /* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: 'Oswald-L';
+    font-style: normal;
+    font-weight: 300;
+    src: url("/assets/fonts/Oswald-Light.ttf") ;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@font-face {
+    font-family: 'Oswald-R';
+    font-weight: 400;
+    src: url("/assets/fonts/Oswald-Regular.ttf") ;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+body { margin: 0; font-family: "Oswald-L", "Oswald-R",  Roboto, "Helvetica Neue", sans-serif; }
+*{
+    font-family: "Oswald-L", sans-serif;
+    font-weight: 300;
+    font-size: 14px !important;/*18px*/
+}
+mat-toolbar{
+    position: relative;
+    z-index: 3;
+}
 mat-sidenav-container{
     display: flex;
     flex-direction: row;
     height: calc(100vh - 64px);
+}
+mat-icon{
+    font-size: 1.2em !important;
+}
+
+button.active{
+    background: rgba(255, 255, 255, 0.24) !important;
+}
+
+@media (max-width : 599px) {
+    mat-sidenav-container{
+        height: calc(100vh - 56px);
+    }
 }

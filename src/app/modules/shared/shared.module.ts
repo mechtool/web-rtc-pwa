@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import {RouterModule} from "@angular/router";
 import {MaterialModule} from '../material/material.module';
 import { ColorMenuComponent } from './color-menu/color-menu.component';
-import {SidenavItemComponent} from "./sidenav-item/sidenav-item.component";
+import { ContactItemComponent } from './contact-item/contact-item.component';
 @NgModule({
   declarations: [
       ColorMenuComponent,
-      SidenavItemComponent,
+      ContactItemComponent,
   ],
   imports: [
     CommonModule,
@@ -15,8 +15,8 @@ import {SidenavItemComponent} from "./sidenav-item/sidenav-item.component";
       MaterialModule,
   ],
     exports : [
-        ColorMenuComponent,
-	SidenavItemComponent,
+	ColorMenuComponent,
+	ContactItemComponent,
     ],
 })
 export class SharedModule { }

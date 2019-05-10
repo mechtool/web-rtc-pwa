@@ -1,25 +1,25 @@
-:host{
-    position: absolute;
-    right: 20px;
-    top: 44px;
-    z-index: 2;
-}
 .color-menu-container{
     display: flex;
-    width: 100px;
-    height: 100px;
-    flex-wrap: wrap;
-    background: white;
-    box-shadow: 0 0 20px rgba(158, 158, 158, 0.63);
 }
-.color-menu-item{
-    width: 46%;
-    height: 46%;
-    border-radius: 50%;
+div.color-item{
+    width: 40px;
+    height: 40px;
     cursor: pointer;
-    margin: 2px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    color: white;
+}
+div.color-item:first-child{
+    color: black;
+}
+mat-icon{
+    opacity: 0;
+    position: relative;
+    font-size: 20px!important;
+    top: 10px;
+    left: 11px;
+    color: inherit;
 }
 
+
+div.color-item.active mat-icon{
+    opacity: 1;
+}

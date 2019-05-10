@@ -1,0 +1,24 @@
+<mat-accordion [@.disabled]="accordionAnimation">
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>
+			<mat-panel-title>
+				Цветовая тема
+			</mat-panel-title>
+			<mat-panel-description>
+				Цветовое оформление приложения
+			</mat-panel-description>
+		</mat-expansion-panel-header>
+		<app-color-menu></app-color-menu>
+	</mat-expansion-panel>
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>
+			<mat-panel-title>
+				Выход
+			</mat-panel-title>
+			<mat-panel-description>
+				Выход из приложения
+			</mat-panel-description>
+		</mat-expansion-panel-header>
+		<mat-icon class="exit-icon" (click)="exitApp()">exit_to_app</mat-icon>
+	</mat-expansion-panel>
+</mat-accordion>
