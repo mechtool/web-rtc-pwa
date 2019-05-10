@@ -5,5 +5,5 @@ admin.initializeApp({
 	databaseURL: 'https://web-rtc-pwa.firebaseio.com',
 });
 exports.getContacts = functions.https.onRequest((request, response) => {
-	let input = request.query.input;
+	
  });
