@@ -1,0 +1,91 @@
+<form class="auth-form" [ngSwitch]="formType" >
+	<div class="stater-form-container" *ngSwitchCase="0">
+		<img class="starter-img" src="/assets/icons/app-shell/mss.png">
+		<span class="enter-note-var">{{enterNote}}</span>
+		<div class="provider-icons" >
+			<img [src]="img" *ngFor="let img of providerIcons; let inx = index" (click)="onClickProviderIcons(inx)">
+		</div>
+	</div>
+	<div class="email-pass-block" *ngSwitchCase="1" [formGroup]="emailPassGroup">
+		<mat-form-field class="email-field">
+			<input matInput placeholder="Email" formControlName="emailControl">
+			<mat-hint>Адрес активной почты</mat-hint>
+			<mat-icon  matSuffix style="top: 4px; position: relative;">mail</mat-icon>
+			<mat-error *ngIf="emailPassGroup.get('emailControl').hasError('email') && !emailPassGroup.get('emailControl').hasError('required')">Введите корректный адрес почты
+			</mat-error>
+			<mat-error *ngIf="emailPassGroup.get('emailControl').hasError('required')">
+				Обязательный
+			</mat-error>
+		</mat-form-field>
+		<mat-form-field class="pass-field">
+			<input #passInput matInput type="password" placeholder="Пароль" formControlName="passControl">
+			<mat-hint>Придумайте свой пароль</mat-hint>
+			<button mat-button  matSuffix mat-icon-button aria-label="Пароль" (click)="passInput.type = passInput.type == 'text' ? 'password' : 'text'">
+				<mat-icon >{{passInput.type == 'text' ? 'visibility_off' : 'visibility'}}</mat-icon>
+			</button >
+			<button mat-button  matSuffix mat-icon-button aria-label="Напомнить" [disabled]="emailPassGroup.get('emailControl').hasError('email') || emailPassGroup.get('emailControl').hasError('required')" (click)="onClickRemainderPass()" >
+				<mat-icon >notification_important</mat-icon>
+			</button >
+			<mat-error *ngIf="emailPassGroup.get('passControl').hasError('minlength') && !emailPassGroup.get('passControl').hasError('required')">Не менее 8 символов
+			</mat-error>
+			<mat-error *ngIf="emailPassGroup.get('passControl').hasError('required')">
+				Обязательный
+			</mat-error>
+		</mat-form-field>
+		<button class="email-pass-ready" mat-raised-button color="primary" [disabled]="emailPassGroup.invalid" (click)="onReadyEmailPassButton()">Готово</button>
+		<button class="email-pass-cancel" mat-raised-button (click)="onCancelButton()">Назад</button>
+	</div>
+	<div class="google-block" *ngSwitchCase="2">
+		<p>Вход в приложение при помощи провайдера Google, с возможностью выбора определенного аккаунта.</p>
+		<button class="email-pass-ready" color="primary" mat-raised-button (click)="onReadyGoogleButton('redirect')">Войти</button>
+		<button class="email-pass-cancel" mat-raised-button (click)="onCancelButton()">Назад</button>
+	</div>
+	<div class="phone-block" *ngSwitchCase="3" [formGroup]="phoneGroup">
+		<mat-form-field class="phone-field">
+			<mat-label>Код страны</mat-label>
+			<mat-select formControlName="countryCodeControl" [(value)]="selected" >
+				<mat-select-trigger>
+					<span class="state-code">{{selected.code}}</span>
+					<span class="flag-icon flag-icon-{{selected.class}}"> </span>
+					<span>{{selected.class.toUpperCase()}}</span>
+				</mat-select-trigger>
+				<mat-option *ngFor="let state of states" [value]="state">
+					<span class="state-code">{{state.code}}</span>
+					<span class="flag-icon flag-icon-{{state.class}}"> </span>
+					<span class="location">{{state.class.toUpperCase()}}</span>
+				</mat-option>
+			</mat-select>
+			<mat-error *ngIf="phoneGroup.get('countryCodeControl').hasError('required')">Обязательный</mat-error>
+		</mat-form-field>
+		<mat-form-field class="phone-number">
+			<input matInput type="tel" placeholder="Номер телефона *" formControlName="phoneNumberControl">
+			<mat-hint>Активный номер телефона</mat-hint>
+			<mat-error *ngIf="phoneGroup.get('phoneNumberControl').hasError('pattern') && !phoneGroup.get('phoneNumberControl').hasError('required')"> 10 символов
+			</mat-error>
+			<mat-error *ngIf="phoneGroup.get('phoneNumberControl').hasError('required')">
+				Обязательный
+			</mat-error>
+		</mat-form-field>
+		<div id="recaptcha-container"></div>
+		<div class="button-group">
+			<button class="phone-ready" mat-raised-button color="primary" [disabled]="phoneGroup.invalid" [style.cursor]="phoneReadyCursor" (click)="onClickReadyPhone()">{{phoneButtonText}}</button>
+			<button class="phone-cancel" mat-raised-button (click)="onCancelButton()">Назад</button>
+		</div>
+	</div>
+	<div class="phone-code-block" *ngSwitchCase="4" [formGroup]="phoneCodeGroup">
+		<mat-form-field class="enter-verification-code">
+			<mat-label>Sms код *</mat-label>
+			<input  type="text" matInput placeholder="Sms код" formControlName="phoneCodeControl">
+			<mat-error *ngIf="phoneCodeGroup.get('phoneCodeControl').hasError('pattern') && !phoneCodeGroup.get('phoneCodeControl').hasError('required')"> 6 символов
+			</mat-error>
+			<mat-error *ngIf="phoneCodeGroup.get('phoneCodeControl').hasError('required')">
+				Обязательный
+			</mat-error>
+		</mat-form-field>
+		<div class="button-group">
+			<button class="phone-code-button"  mat-raised-button color="primary" [disabled]="phoneCodeGroup.invalid" (click)="onConfirmPhoneCode()">Отправить</button>
+			<button mat-raised-button (click)="onCancelButton()">Отмена</button>
+		</div>
+	</div>
+</form>
+

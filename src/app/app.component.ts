@@ -1,12 +1,17 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, OnInit} from '@angular/core';
-import {NavigationCancel, NavigationEnd, NavigationStart, Router} from "@angular/router";
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, NgZone, ViewChild} from '@angular/core';
+import { Router, RouterOutlet} from "@angular/router";
 import {MatIconRegistry} from "@angular/material";
 import {DomSanitizer} from "@angular/platform-browser";
 import {routerTransition} from './animations/animations';
-import {ContentPageComponent} from "./modules/content-page/content-page.component";
+import {AuthFirebaseService} from "./services/auth-firebase.service";
+import {CommunicationService} from "./services/communication.service";
+import {environment} from "../environments/environment";
 
-var swRegistration;
-
+//Загрузка библиотеки должна быть первой
+import * as firebase from 'firebase/app';
+import 'firebase/database'
+firebase.initializeApp(environment.firebaseConfig);
+const database = firebase.database();
 
 @Component({
   selector: 'app-root',
@@ -15,24 +20,34 @@ var swRegistration;
     animations : [routerTransition],
     changeDetection : ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements OnInit{
+export class AppComponent {
     
-    public progressVisible = false;
     @HostBinding('class') componentCssClass = 'second-theme';
-    
+    @ViewChild('mainOutlet') public mainOutlet : RouterOutlet;
+
     constructor(
 	private router : Router,
 	private changeRef : ChangeDetectorRef,
 	private iconRegistry : MatIconRegistry ,
 	private sanitizer : DomSanitizer,
+	public authService : AuthFirebaseService,
+	private ngZone: NgZone,
+	private communicationService : CommunicationService
     ) {
 
-	this.router.events.subscribe((event) => { //запуск прогресс бара загрузки страницы с сервера
-	    if(event instanceof NavigationStart || event instanceof NavigationEnd || event instanceof NavigationCancel){
-		this.progressVisible = event instanceof NavigationStart;
-		this.changeRef.detectChanges();
-	    }
-	});
+	//Старт сервиса аутентификации с подпиской на изменения пользователя
+        this.authService.startService(user => {
+            let url = user ? '/content' : '/auth';
+	    this.ngZone.run(() => this.router.navigateByUrl(url)).then(res => {
+		this.communicationService.sendResource({type : 'enter-note', value : !user ? '...выберите провайдера' : '...ожидаем вход'});
+	    });
+        });
+        
+        this.communicationService.communicateObservable.subscribe(opt => {
+               if(opt.type == 'changedColor'){
+                   this.componentCssClass = opt.value;
+	       }
+	}) ;
 	
 	//регистрация иконки в реестре иконок
 	[
@@ -52,44 +67,8 @@ export class AppComponent implements OnInit{
 	
     }
     
-    
     getState(outlet) {
 	return outlet.activatedRouteData.type;
-    }
-    
-    ngOnInit(){
-       this.initialiseServiceWorker();
-    }
-    
-    
-    componentAdded(component){
-	if(component instanceof ContentPageComponent){
-	   component.colorChanged.subscribe((colorClass => {
-	       this.componentCssClass = colorClass;
-	   }))
-	    
-	}
-    }
-    
-    componentRemoved($event){
-    
-    }
-    
-    initialiseServiceWorker(){
-	if ('serviceWorker' in navigator && 'PushManager' in window) {
-	    console.log('Серивисный рабочий и PushNotification поддерживаються.');
-	    navigator.serviceWorker.register('sw.js')
-		.then(function(swReg) {
-		    console.log('Сервисный рабочий зарегистрирован!', swReg);
-		    swRegistration = swReg;
-		})
-		.catch(function(error) {
-		    console.error('Ошибка при регистрации сервисного рабочего!', error);
-		});
-	} else {
-	    console.warn('Серивисный рабочий и PushNotification поддерживаються!');
-	    //pushButton.textContent = 'Push Not Supported';
-	}
     }
     
 }

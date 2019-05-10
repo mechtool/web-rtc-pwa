@@ -1,8 +1,0 @@
-<div class="sidenav-item" *ngIf='item.href' [routerLink]="item.href" [routerLinkActive]="'active'"  [routerLinkActiveOptions]="{exact:true}">
-	<mat-icon class="menuSvgIcon" *ngIf="item.children" [svgIcon]="item.icon"></mat-icon>
-	<span class="itemText">{{item.text}}</span>
-</div>
-<div class="sidenav-item" *ngIf='!item.href'>
-	<mat-icon class="menuSvgIcon" *ngIf="item.children" [svgIcon]="item.icon"></mat-icon>
-	<span class="itemText">{{item.text}}</span>
-</div>

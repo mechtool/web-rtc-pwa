@@ -1,0 +1,49 @@
+.email-pass-block,.google-block,.phone-block,.phone-code-block  {
+    padding: 40px;
+    box-shadow: 0 0 20px -13px;
+    border-radius: 10px;
+}
+.google-block {
+    width: 200px
+}
+.stater-form-container,.provider-icons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.provider-icons{
+    margin-top: 20px;
+}
+.provider-icons img{
+    margin: 4px;
+    cursor: pointer;
+}
+.provider-icons, .provider-icons img {
+    height: 32px;
+}
+.stater-form-container{
+    flex-direction: column;
+}
+.starter-img{
+    width: 50%;
+}
+mat-form-field{
+    display: block;
+    margin-bottom: 30px;
+}
+mat-form-field:first-child{
+    margin-bottom: 10px;
+
+}
+button[class^="email-pass"], button[class*="phone"]{
+    margin-right: 10px;
+}
+.enter-note-var{
+    margin-top: 10px;
+}
+.state-code,.flag-icon {
+    margin-right: 4px;
+}
+#recaptcha-container{
+    margin-bottom: 20px;
+}

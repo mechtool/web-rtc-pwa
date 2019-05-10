@@ -1,0 +1,25 @@
+<mat-accordion [@.disabled]="accordionAnimation">
+	<mat-expansion-panel>
+		<mat-expansion-panel-header>
+			<mat-panel-title>
+				Поиск и добавление контактов
+			</mat-panel-title>
+			<mat-panel-description>
+				Добавляет пользоваетельский контакт
+			</mat-panel-description>
+		</mat-expansion-panel-header>
+		<form [formGroup]="contactForm">
+			<mat-form-field class="search-field">
+				<mat-label>Телефон или email *</mat-label>
+				<input type="text" matInput formControlName="contactsControl" required [matAutocomplete]="contactsGroup">
+				<mat-autocomplete #contactsGroup="matAutocomplete">
+					<mat-option *ngFor="let contact of contacts | async" [value]="contact"></mat-option>
+				</mat-autocomplete>
+				<mat-hint>Поиск контакта по телефону, почте, имени</mat-hint>
+			</mat-form-field>
+			<button class="search-button" mat-flat-button matSuffix color="primary" (click)="onClickSearch()">
+				<mat-icon aria-label="Найти контакт">search</mat-icon>
+			</button>
+		</form>
+	</mat-expansion-panel>
+</mat-accordion>
